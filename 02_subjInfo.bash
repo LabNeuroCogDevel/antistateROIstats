@@ -12,7 +12,7 @@ LOAD DATA LOCAL INFILE 'txt/id_date.txt'
 
 select 
  concat(t.id,'/', date_format(t.vd,'%y%m%d*')) as d,
- age,
+ age,sex,
  CASE WHEN age<=$childagemax THEN 'Children'
       WHEN age<=$teenagemax  THEN 'Teenagers'
       WHEN age>$teenagemax   THEN 'Adults'
@@ -21,5 +21,6 @@ select
 from tempID as t 
  left join peopleEnroll e on e.value = t.id
  left join visits v on
- v.visitdate = t.vd and e.peopleid=v.peopleid;
+   v.visitdate = t.vd and e.peopleid=v.peopleid
+ left join people p on e.peopleid = p.peopleid
 " > txt/folder_mask_age.txt 
