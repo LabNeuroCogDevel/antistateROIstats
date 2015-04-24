@@ -1,18 +1,18 @@
-SEF	Adult	−4	3	55
+SEF	Adult	-4	3	55
 	Teenagers	0	1	57
 	Children	0	0	58
-R.FEF	Adult	26	−6	59
-	Teenagers	27	−5	52
-	Children	25	−7	58
-L.FEF	Adult	−28	−9	60
-	Teenagers	−28	−9	54
-	Children	−28	−10	57
+R.FEF	Adult	26	-6	59
+	Teenagers	27	-5	52
+	Children	25	-7	58
+L.FEF	Adult	-28	-9	60
+	Teenagers	-28	-9	54
+	Children	-28	-10	57
 R.IPreCS	Adult	50	4	35
 	Teenagers	45	2	34
 	Children	45	4	36
-L.IPreCS	Adult	−38	9	45
-	Teenagers	−34	7	41
-	Children	−51	−1	36
+L.IPreCS	Adult	-38	9	45
+	Teenagers	-34	7	41
+	Children	-51	-1	36
 R.MFG	Adult	39	25	25
 	Teenagers	46	14	30
 	Children	47	20	33
@@ -25,54 +25,54 @@ vmPFC	Adult	2	38	5
 R.Insula	Adult	36	17	10
 	Teenagers	34	17	8
 	Children	35	17	9
-L.Insula	Adult	−34	14	10
-	Teenagers	−33	13	11
-	Children	−35	17	6
-R.SMG	Adult	58	−46	22
-	Teenagers	56	−45	20
-	Children	54	−47	19
-L.SMG	Adult	−57	−49	22
-	Teenagers	−55	−44	18
-	Children	−54	−46	24
-R.SPC	Adult	19	−69	51
-	Teenagers	20	−71	53
-	Children	18	−72	52
-L.SPC	Adult	−18	−68	52
-	Teenagers	−22	−67	49
-	Children	−17	−69	54
-R.IPS	Adult	26	−59	52
-	Teenagers	26	−63	55
-	Children	30	−59	44
-L.IPS	Adult	−26	−63	50
-	Teenagers	−29	−62	52
-	Children	−31	−54	47
+L.Insula	Adult	-34	14	10
+	Teenagers	-33	13	11
+	Children	-35	17	6
+R.SMG	Adult	58	-46	22
+	Teenagers	56	-45	20
+	Children	54	-47	19
+L.SMG	Adult	-57	-49	22
+	Teenagers	-55	-44	18
+	Children	-54	-46	24
+R.SPC	Adult	19	-69	51
+	Teenagers	20	-71	53
+	Children	18	-72	52
+L.SPC	Adult	-18	-68	52
+	Teenagers	-22	-67	49
+	Children	-17	-69	54
+R.IPS	Adult	26	-59	52
+	Teenagers	26	-63	55
+	Children	30	-59	44
+L.IPS	Adult	-26	-63	50
+	Teenagers	-29	-62	52
+	Children	-31	-54	47
 R.Putamen	Adult	20	3	11
 	Teenagers	21	1	11
 	Children	20	3	15
-L.Putamen	Adult	−20	1	11
-	Teenagers	−21	4	8
-	Children	−21	5	15
-R.Dorsal.medial.thalamus	Adult	10	−20	11
-	Teenagers	12	−21	15
-	Children	11	−20	14
-L.Dorsal.medial.thalamus	Adult	−11	−20	10
-	Teenagers	−14	−20	17
-	Children	−13	−21	13
-R.Cere	Adult	32	−61	−22
-	Teenagers	31	−40	−31
-	Children	34	−57	−21
-L.Cere	Adult	−31	−59	−21
-	Teenagers	−31	−45	−36
-	Children	−34	−64	−25
-SC	Adult	5	−29	−3
-	Teenagers	6	−28	−4
-	Children	4	−30	−6
-R.Visual	Adult	11	−80	6
-	Teenagers	11	−80	1
-	Children	11	−82	4
-L.Visual	Adult	−4	−86	4
-	Teenagers	−6	−82	4
-	Children	−6	−86	4
+L.Putamen	Adult	-20	1	11
+	Teenagers	-21	4	8
+	Children	-21	5	15
+R.Dorsal.medial.thalamus	Adult	10	-20	11
+	Teenagers	12	-21	15
+	Children	11	-20	14
+L.Dorsal.medial.thalamus	Adult	-11	-20	10
+	Teenagers	-14	-20	17
+	Children	-13	-21	13
+R.Cere	Adult	32	-61	-22
+	Teenagers	31	-40	-31
+	Children	34	-57	-21
+L.Cere	Adult	-31	-59	-21
+	Teenagers	-31	-45	-36
+	Children	-34	-64	-25
+SC	Adult	5	-29	-3
+	Teenagers	6	-28	-4
+	Children	4	-30	-6
+R.Visual	Adult	11	-80	6
+	Teenagers	11	-80	1
+	Children	11	-82	4
+L.Visual	Adult	-4	-86	4
+	Teenagers	-6	-82	4
+	Children	-6	-86	4
 ACC	Adult	7	12	39
 	Teenagers	6	10	44
 	Children	5	12	41
