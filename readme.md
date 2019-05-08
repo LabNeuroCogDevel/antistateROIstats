@@ -19,7 +19,7 @@
 Per trial first saccade scoring table (`txt/lat_score.tsv.gz`) is tab delimited contains
 * identification: id, visit date as 8 digit year month date, and run number (1-4)
 * trial type (AS or PS for anti or pro saccade)
-* latency (in ms) 
+* latency (in ms) of the first saccade (same saccade that is scored)
 * external data "XDAT" sent to the eytracker by the task. A number indicating the side and eccentricity of the yellow dot to look to/away from
 * If the trial was dropped, there is a description "Desc" of why. 
 * score "Count" number saccades until correct
@@ -29,7 +29,7 @@ Per trial first saccade scoring table (`txt/lat_score.tsv.gz`) is tab delimited 
 | -1 | drop            |
 |  0 | incorrect       |
 |  1 | correct         |
-|  2 | error corrected |
+|  2 | error corrected, lat is for first saccade |
 
 
 e.g.
