@@ -5,7 +5,7 @@ trap 'e=$?; [ $e -ne 0 ] && echo "$0 exited in error"' EXIT
 TASKDIR=/Volumes/L/bea_res/Data/Tasks/AntiState/Basic
 #
 # 20190508WF - init
-#    get saccade/eye timeseries
+#    get saccade/eye per trial lat and score
 #
 sed s/-//g txt/id_date.txt | while read id ymd; do
   subj_score=$TASKDIR/$id/$ymd/Scored/txt/
