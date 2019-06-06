@@ -8,12 +8,14 @@ trap 'e=$?; [ $e -ne 0 ] && echo "$0 exited in error"' EXIT
 #
 subj_list="$(cut -f 1 -d' ' txt/id_date.txt|sed "s/\(.*\)/'\1'/"|sort |uniq|tr '\n' ,|sed 's/,$//')"
 qry() { psql -h arnold.wpic.upmc.edu lncddb lncd -F$'\t' -Aqtc "$@"; }
-echo -e "id\tvdate\twfull2\twfull4" > txt/wasi.txt
+echo -e "id\tvdate\twfull2\twfull4\twfull2t\twfull4t" > txt/wasi.txt
 qry "
   select
       id, to_char(vtimestamp,'YYYYmmdd') as v,
       measures->'wfull2' wfull2,
-      measures->'wfull4' wfull4
+      measures->'wfull4' wfull4,
+      measures->'wfull2_t' wfull2_t,
+      measures->'wfull4_t' wfull4_t
   from visit_task
   natural join enroll natural join visit 
   where
