@@ -6,7 +6,7 @@
 # output files to res/$grp.txt
 
 # what do the final processed runs look like
-subjdir="../ANTISTATELONG/"
+subjdir="/Volumes/Governator/ANTISTATELONG/"
 filepat="/run*/nfswkmt_functional_5.nii.gz"
 
 #bash expands to 4 runs so xargs will overfill bash arg max in 3dRIOstats

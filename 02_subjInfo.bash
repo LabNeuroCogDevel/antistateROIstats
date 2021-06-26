@@ -3,7 +3,7 @@ childagemax=12.9
 teenagemax=19.9
 
 
-ls -d ../ANTISTATELONG/1*/*/|perl -lne 'print "$1 20$2-$3-$4" if m:(\d{5})/(\d{2})(\d{2})(\d{2}):' > txt/id_date.txt
+ls -d /Volumes/Governator/ANTISTATELONG/1*/*/|perl -lne 'print "$1 20$2-$3-$4" if m:(\d{5})/(\d{2})(\d{2})(\d{2}):' > txt/id_date.txt
 
 mysql -uroot lncddb3 -NBe "
 CREATE TEMPORARY TABLE tempid ( id INT, vd DATE);

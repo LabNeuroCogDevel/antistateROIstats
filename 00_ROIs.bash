@@ -6,7 +6,7 @@
 #
 
 roirad=5
-mnitmplt="$HOME/standard/mni_icbm152_nlin_asym_09c/mni_icbm152_t1_tal_nlin_asym_09c_3mm.nii"
+mnitmplt="/opt/ni_tools/standard_old/mni_icbm152_nlin_asym_09c/mni_icbm152_t1_tal_nlin_asym_09c_3mm.nii"
 
 # http://www.jneurosci.org/content/30/46/15535/T1.expansion.html > txt/Kais26ROI.txt
 Rscript ROIs.R
