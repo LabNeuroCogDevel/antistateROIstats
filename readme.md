@@ -6,9 +6,11 @@
 | ROI means    | [`res/*txt`](res/)                                   |
 | ROI label    | [`txt/roikey.txt`](txt/roikey.txt)                   |
 | Eye Data     | [`txt/lat_score.tsv.gz`](txt/lat_score.tsv.gz)       |
+| preproc log  | [`txt/10133_061102162341_run1_preprocessFunctional.log`](txt/10133_061102162341_run1_preprocessFunctional.log)|
 
 # Scripts
 
+ 0. `000_preprocess.bash` (for posterity, last modified in Feb 2012. Uses [preprocessFunctional](https://github.com/LabNeuroCogDevel/fmri_processing_scripts))
  0. `00_ROIs.bash`
  0. `01_censorList.bash`
  0. `02_subjInfo.bash`

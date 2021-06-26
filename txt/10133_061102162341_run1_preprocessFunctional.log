@@ -1,0 +1,60 @@
+#!/bin/bash
+## Log of preprocessFunctional commands
+## Auto-detecting TR and slice acquisition order from DICOM header: ./04-0001-000001.dcm
+##   Detected TR: 1.500s
+##   Detected Slice Order: interleaved
+##   If this is incorrect, please exit the script now by pressing Ctrl-C
+sleep 3
+Dimon 	    -infile_pattern "*.dcm" 	    -GERT_Reco 	    -quit 	    -dicom_org 	    -sort_by_acq_time 	    -gert_write_as_nifti 	    -gert_create_dataset 	    -gert_to3d_prefix functional
+gzip -f functional.nii
+3dresample -overwrite -orient LPI -prefix "functional.nii.gz" -inset "functional.nii.gz"
+## 1. Creating subject motion plots
+mcflirt -in functional -o mcplots -plots -rmsabs -rmsrel
+fsl_tsplot -i mcplots.par -t 'MCFLIRT estimated rotations (radians)' -u 1 --start=1 --finish=3 -a x,y,z -w 800 -h 300 -o rot.png
+fsl_tsplot -i mcplots.par -t 'MCFLIRT estimated translations (mm)' -u 1 --start=4 --finish=6 -a x,y,z -w 800 -h 300 -o trans.png
+fsl_tsplot -i mcplots_abs.rms,mcplots_rel.rms -t 'MCFLIRT estimated mean displacement (mm)' -u 1 -w 800 -h 300 -a absolute,relative -o disp.png
+ls -d mcplots* | grep -v mcplots.par | xargs rm -rf
+touch .motion_plots_complete
+## Running slice timing correction
+slicetimer -i "functional" -o "t_functional" -r 1.500 --odd
+touch .slice_timing_complete
+## Running motion correction
+## Using mean volume for motion correction
+mcflirt -in "t_functional" -o "mt_functional" -meanvol -stages 4 -sinc_final
+touch .motion_correction_complete
+## 4. Computing mean functional
+fslmaths "mt_functional" -Tmean "mt_mean_func"
+## 5. Skull stripping functionals
+bet "mt_mean_func" "kmt_mean_func" -R -f 0.4 -m
+fslmaths "mt_functional" -mas "kmt_mean_func_mask" "kmt_functional"
+fslmaths "kmt_functional" -thr 82.127700 -Tmin -bin "kmt_functional_98_2_mask" -odt char
+fslmaths "kmt_functional_98_2_mask" -dilF "kmt_functional_98_2_mask"
+## Thresholding 4d functionals by zeroing any voxel below the value: 2nd %ile + \(98th %ile - 2nd %ile\)/10
+## This is the default thresholding method used by FSL GUI tools.
+fslmaths "kmt_functional" -mas "kmt_functional_98_2_mask" "kmt_functional_masked"
+touch .thresholding_complete
+## 6. Warping subject mean functional to subject structural (intrasubject)
+flirt -in "kmt_mean_func" -ref ../mprage/mprage_bet.nii.gz -out func_to_mprage -omat func_to_mprage.mat -dof 12
+flirt -in kmt_functional_98_2_mask -applyxfm -init func_to_mprage.mat -out kmt_functional_98_2_mask_lin -paddingsize 0.0 -interp nearestneighbour -ref ../mprage/mprage_bet.nii.gz
+applywarp --ref=/Users/lncd/standard/mni_icbm152_nlin_asym_09c/mni_icbm152_t1_tal_nlin_asym_09c_brain_3mm --out=wkmt_functional_98_2_mask --interp=nn --in=kmt_functional_98_2_mask_lin --warp=../mprage/mprage_warpcoef.nii.gz
+## 7. Warping functionals to standard space using coefficients from structural nonlinear warp. Creating functionals with 3mm isotropic voxels
+applywarp 	--ref=/Users/lncd/standard/mni_icbm152_nlin_asym_09c/mni_icbm152_t1_tal_nlin_asym_09c_brain_3mm 	--in="kmt_functional_masked" 	--out="wkmt_functional" 	--premat=func_to_mprage.mat 	--warp=../mprage/mprage_warpcoef.nii.gz 	--interp=sinc 	--mask=wkmt_functional_98_2_mask
+ln -s "/Users/lncd/standard/mni_icbm152_nlin_asym_09c/mni_icbm152_t1_tal_nlin_asym_09c_brain_3mm.nii" ./template_brain.nii
+touch .warp_complete
+## 8. Smoothing functional data
+fslmaths "wkmt_functional" -Tmean "wkmt_mean_func"
+susan "wkmt_functional" 517.431335 2.12314 3 1 1 "wkmt_mean_func" 517.431335 "swkmt_functional_5"
+touch .smoothing_complete
+## 9. High-pass filtering functional data
+fslmaths "swkmt_functional_5" -bptf 40 -1 "fswkmt_functional_5"
+touch .temporal_filtering_complete
+## 10. Grand mean intensity normalization (rescaling)
+## Rescaling intensities by 100/voxelmean
+fslmaths "fswkmt_functional_5" -Tmean "fswkmt_mean_float" -odt float
+fslmaths "fswkmt_functional_5" -mul 100 -div fswkmt_mean_float "nfswkmt_functional_5" -odt float
+touch .rescaling_complete
+## 11. Setting TR in nfswkmt_functional_5.nii.gz to: 1.500
+3drefit -TR 1.500 "nfswkmt_functional_5.nii.gz"
+fslmaths "nfswkmt_functional_5" -mas wkmt_functional_98_2_mask "nfswkmt_functional_5"
+fslmaths "nfswkmt_functional_5" -Tmean "nfswkmt_mean_func_5"
+ln -s "wkmt_functional_98_2_mask.nii.gz" ./subject_mask.nii.gz
