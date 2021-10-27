@@ -17,3 +17,6 @@ txt/CogLong_et_ts_tsv.tar.xz: 04.2_et_raw.bash
 
 txt/wasi.txt txt/rist.txt: 05_wasi.bash txt/id_date.txt
 	./05_wasi.bash
+
+txt/task_version.txt: 04.3_task_info.bash
+	./04.3_task_info.bash
