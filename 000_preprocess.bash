@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# 20210626WF - copied from /Volumes/Governator/ANTISTATELONG/preprocessWrapper to here for posterity
+# 20120210   - final. date based on ls -l timestamp and "date="
+
 #Make sure to run it with & at end so that program doesn't stop when ssh logs me out
 #Another option is to use "screen" program (workspace saver) and no &
 #Also if want to output to screen and save, do:
