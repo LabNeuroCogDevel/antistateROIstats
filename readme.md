@@ -54,4 +54,6 @@ id ymd run trial xdat lat fstCorrect ErrCorr AS Count Desc
 
 # Log
  * 20190508WF - create `txt/lat_score.tsv.gz`, local repo copy in `/Volumes/Hera/Projects/Collab/Ryali_AarthiCog/antistateROIstats`
+ * 20211027WF - include MR <-> task lookup files. from `/Volumes/L/bea_res/AntiState_BIRC/Subjects_Scripts_To_Run/S393_Scripts/S393_Run1_05VA/5VA_AntiVGSMixed072512minusfix.es` & `/Volumes/Hera/Projects/Cog/AS_long/txt/Anti_Mix_Design_Lists_FINAL_minusfix_fixblockrecord_FINMOD.xls`
+ * 20211030WF - add `DataVsPublished.org` to explore published data mean statitics vs provided data.
 
