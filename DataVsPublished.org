@@ -8,13 +8,13 @@ participants/num visits: initial 98, kept 78. 1 with no errors.
 
 2010 Latencies (ms)
 | Group    | AS mean | SD | PS mean | SD | n_id |
-| adults   |     486 | 63 |     349 | 49 | 27 |
-| adol.    |     493 | 64 |     362 | 34 | 25 |
 | children |     539 | 81 |     395 | 45 | 26 |
+| adol.    |     493 | 64 |     362 | 34 | 25 |
+| adults   |     486 | 63 |     349 | 49 | 27 |
 
 * Here
 
-  #+begin_src R :session :colnames yes :export results
+  #+begin_src R :session :results none
     library(dplyr)
     library(tidyr)
     eye <- read.table(gzfile('./txt/lat_score.tsv.gz'), sep="\t", header=T) %>%
@@ -49,9 +49,10 @@ participants/num visits: initial 98, kept 78. 1 with no errors.
         select(grp, AS, m, s) %>%
         pivot_wider(names_from="AS", values_from = c("m","s")) %>%
         mutate_at(vars(matches("_")), round) %>%
-        merge(cnt, on="grp")
+        merge(cnt, on="grp") %>% arrange(grp)
     }
 #+end_src
+
 
   #+begin_src R :colnames yes :session 
     # display only correct trial mean/sd
@@ -64,9 +65,9 @@ participants/num visits: initial 98, kept 78. 1 with no errors.
 #+RESULTS:
 | grp       | m_AS | m_PS | s_AS | s_PS | n_ids | lastscan |
 |-----------+------+------+------+------+-------+----------|
-| Adults    |  476 |  354 |   98 |   64 |    20 | 20070919 |
 | Children  |  519 |  392 |  174 |  108 |    38 | 20081118 |
 | Teenagers |  497 |  365 |  118 |   84 |    57 | 20080328 |
+| Adults    |  476 |  354 |   98 |   64 |    20 | 20070919 |
 
 ** Notes
 
@@ -84,9 +85,9 @@ These latencies are extracted from the automatic scoring, which wasn't implement
    #+RESULTS:
    | grp       | m_AS | m_PS | s_AS | s_PS | n_ids | lastscan |
    |-----------+------+------+------+------+-------+----------|
-   | Adults    |  477 |  370 |   93 |   76 |    38 | 20120104 |
    | Children  |  520 |  392 |  160 |  107 |    41 | 20101120 |
    | Teenagers |  488 |  371 |  105 |   88 |    84 | 20111217 |
+   | Adults    |  477 |  370 |   93 |   76 |    38 | 20120104 |
 
 *** ErrorCorrected only
    #+begin_src R :colnames yes :session
@@ -96,6 +97,6 @@ These latencies are extracted from the automatic scoring, which wasn't implement
    #+RESULTS:
    | grp       | m_AS | m_PS | s_AS | s_PS | n_ids | lastscan |
    |-----------+------+------+------+------+-------+----------|
-   | Adults    |  350 |  318 |   85 |  189 |    38 | 20120104 |
    | Children  |  369 |  316 |   91 |  199 |    41 | 20101120 |
    | Teenagers |  349 |  292 |   77 |  170 |    84 | 20111217 |
+   | Adults    |  350 |  318 |   85 |  189 |    38 | 20120104 |
