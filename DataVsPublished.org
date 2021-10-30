@@ -1,7 +1,7 @@
 #+TITLE: This data vs published data
 
 * Published
-  [[https://www.jneurosci.org/content/jneuro/30/46/15535.full.pdf][Hwang et al 2010]] using eye data from [[https://www.jneurosci.org/content/29/40/12558][Velanova et al 2009]]
+  [[https://www.jneurosci.org/content/jneuro/30/46/15535.full.pdf][Hwang et al 2010]] using eye data from [[https://pubmed.ncbi.nlm.nih.gov/18281300/][Velanova et al 2008]]
 
 participants: initial 98, kept 78
 Latencies (ms)
@@ -49,12 +49,13 @@ Latencies (ms)
         mutate_at(vars(matches("_")), round) %>%
         merge(cnt, on="grp")
     }
+#+end_src
 
-
+  #+begin_src R :colnames yes :session 
     # display only correct trial mean/sd
     # and reshape to match table at top
     # also include counts and last scan date
-    eye_age %>% filter(ymd<20100000, sesnum==1) %>%
+    eye_age %>% filter(as.numeric(ymd)<20090000, sesnum==1) %>%
       tbl_scores
 #+end_src
 
@@ -62,8 +63,8 @@ Latencies (ms)
 | grp       | m_AS | m_PS | s_AS | s_PS | n_ids | lastscan |
 |-----------+------+------+------+------+-------+----------|
 | Adults    |  476 |  354 |   98 |   64 |    20 | 20070919 |
-| Children  |  518 |  392 |  173 |  109 |    39 | 20090711 |
-| Teenagers |  495 |  366 |  116 |   84 |    59 | 20091114 |
+| Children  |  519 |  392 |  174 |  108 |    38 | 20081118 |
+| Teenagers |  497 |  365 |  118 |   84 |    57 | 20080328 |
 
 ** Notes
 
