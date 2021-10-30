@@ -1,0 +1,61 @@
+#+TITLE: This data vs published data
+
+* Published
+  [[https://www.jneurosci.org/content/jneuro/30/46/15535.full.pdf][Hwang et al 2010]] using eye data from [[https://www.jneurosci.org/content/29/40/12558][Velanova et al 2009]]
+
+participants: initial 98, kept 78
+Latencies (ms)
+| Group    | AS mean | SD | PS mean | SD |
+| adults   |     486 | 63 |     349 | 49 |
+| adol.    |     493 | 64 |     362 | 34 |
+| children |     539 | 81 |     395 | 45 |
+
+* Here
+
+  #+begin_src R :session :colnames yes :export results
+    library(dplyr)
+    library(tidyr)
+    eye <- read.table(gzfile('./txt/lat_score.tsv.gz'), sep="\t", header=T) %>%
+      mutate_at(c("run", "trial", "lat"), as.numeric)
+
+    # sesid 10124/060803* to id,ymd 10124,20060803
+    # sesnum is how many times someone has returned
+    age <- read.table('./txt/folder_mask_age.txt',
+                      col.names = c("sesid","age","sex","grp")) %>%
+           separate(sesid,c("id","ymd"),extra="drop") %>% 
+           mutate(ymd=paste("20",ymd,sep=""), age=as.numeric(age)) %>%
+           group_by(id) %>% mutate(sesnum=rank(ymd))
+
+    eye_age <- merge(eye, age, by=c("id", "ymd"))
+
+    gensmry <- function(d) d %>% group_by(AS, Count, grp) %>% 
+      summarise(sessions=length(unique(paste(id,ymd))),
+                m=mean(lat, na.rm=T),
+                s=sd(lat, na.rm=T),
+                trials=n())
+
+
+    all_ses_smry <- gensmry(eye_age)
+    smry2009 <- eye_age %>% filter(ymd<201000, sesnum==1) %>% gensmry
+
+    # display
+    smry2009 %>% filter(Count == 1) %>% ungroup %>%
+      select(grp, AS, m, s) %>%
+      pivot_wider(names_from="AS", values_from = c("m","s")) %>%
+      mutate_at(vars(matches("_")), round)
+
+
+#+end_src
+
+#+RESULTS:
+| grp       | m_AS | m_PS | s_AS | s_PS |
+|-----------+------+------+------+------|
+| Adults    |  476 |  354 |   98 |   64 |
+| Teenagers |  495 |  366 |  116 |   84 |
+| Children  |  518 |  392 |  173 |  109 |
+
+** Notes
+
+We have a lot more data! But if we restrict to correct trials only from only the first sessions before 2010, we can get close to the original reported values.
+
+These latencies are extracted from the automatic scoring, which wasn't implemented until after the 2010 paper. When inspected, score mismatches between algorithm and human showed the error to be human the majority of the time.
