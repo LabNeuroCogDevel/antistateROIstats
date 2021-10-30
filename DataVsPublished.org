@@ -1,14 +1,16 @@
 #+TITLE: This data vs published data
 
 * Published
-  [[https://www.jneurosci.org/content/jneuro/30/46/15535.full.pdf][Hwang et al 2010]] using eye data from [[https://pubmed.ncbi.nlm.nih.gov/18281300/][Velanova et al 2008]]
+  [[https://www.jneurosci.org/content/jneuro/30/46/15535.full.pdf][Hwang et al 2010]] using eye data from [[https://pubmed.ncbi.nlm.nih.gov/18281300/][Velanova et al 2008]] + [[https://www.jneurosci.org/content/29/40/12558][2009]]
 
-participants: initial 98, kept 78
-Latencies (ms)
-| Group    | AS mean | SD | PS mean | SD |
-| adults   |     486 | 63 |     349 | 49 |
-| adol.    |     493 | 64 |     362 | 34 |
-| children |     539 | 81 |     395 | 45 |
+participants/num visits: initial 98, kept 78. 1 with no errors.
+
+
+2010 Latencies (ms)
+| Group    | AS mean | SD | PS mean | SD | n_id |
+| adults   |     486 | 63 |     349 | 49 | 27 |
+| adol.    |     493 | 64 |     362 | 34 | 25 |
+| children |     539 | 81 |     395 | 45 | 26 |
 
 * Here
 
