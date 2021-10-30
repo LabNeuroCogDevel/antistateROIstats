@@ -13,56 +13,86 @@ Latencies (ms)
 * Here
 
   #+begin_src R :session :colnames yes :export results
-        library(dplyr)
-        library(tidyr)
-        eye <- read.table(gzfile('./txt/lat_score.tsv.gz'), sep="\t", header=T) %>%
-          mutate_at(c("run", "trial", "lat"), as.numeric)
+    library(dplyr)
+    library(tidyr)
+    eye <- read.table(gzfile('./txt/lat_score.tsv.gz'), sep="\t", header=T) %>%
+      mutate_at(c("run", "trial", "lat"), as.numeric)
 
-        # sesid 10124/060803* to id,ymd 10124,20060803
-        # sesnum is how many times someone has returned
-        age <- read.table('./txt/folder_mask_age.txt',
-                          col.names = c("sesid","age","sex","grp")) %>%
-               separate(sesid,c("id","ymd"),extra="drop") %>% 
-               mutate(ymd=paste("20",ymd,sep=""),
-                      age=as.numeric(age),
-                      grp=factor(grp, levels=c("Children", "Teenagers","Adults"))) %>%
-               group_by(id) %>% mutate(sesnum=rank(ymd))
+    # sesid 10124/060803* to id,ymd 10124,20060803
+    # sesnum is how many times someone has returned
+    age <- read.table('./txt/folder_mask_age.txt',
+                      col.names = c("sesid","age","sex","grp")) %>%
+           separate(sesid,c("id","ymd"),extra="drop") %>% 
+           mutate(ymd=paste("20",ymd,sep=""),
+                  age=as.numeric(age),
+                  grp=factor(grp, levels=c("Children", "Teenagers","Adults"))) %>%
+           group_by(id) %>% mutate(sesnum=rank(ymd))
 
-        eye_age <- merge(eye, age, by=c("id", "ymd"))
+    eye_age <- merge(eye, age, by=c("id", "ymd"))
 
-        gensmry <- function(d) d %>% group_by(AS, Count, grp) %>% 
-          summarise(sessions=length(unique(paste(id,ymd))),
-                    m=mean(lat, na.rm=T),
-                    s=sd(lat, na.rm=T),
-                    trials=n())
+    gensmry <- function(d) d %>% group_by(AS, Count, grp) %>% 
+      summarise(sessions=length(unique(paste(id,ymd))),
+                m=mean(lat, na.rm=T),
+                s=sd(lat, na.rm=T),
+                trials=n())
+
+    gencnt <- function(d) d %>% group_by(grp) %>%
+      summarise(n_ids=length(unique(id)), lastscan=max(ymd))
+
+    tbl_scores <- function(d, keep_scores=c(1)) {
+      smry <- gensmry(d)
+      cnt <- gencnt(d)
+      smry %>%
+        filter(Count %in% keep_scores) %>% ungroup %>%
+        select(grp, AS, m, s) %>%
+        pivot_wider(names_from="AS", values_from = c("m","s")) %>%
+        mutate_at(vars(matches("_")), round) %>%
+        merge(cnt, on="grp")
+    }
 
 
-        all_ses_smry <- gensmry(eye_age)
-
-        d2009 <- eye_age %>% filter(ymd<20100000, sesnum==1)
-        smry20009 <- gensmry(d2009)
-        smry2009_n <- d2009 %>% group_by(grp) %>%
-          summarise(n=length(unique(id)), lastscan=max(ymd))
-
-        # display only correct trial mean/sd
-        # and reshape to match table at top
-        # also include counts and last scan date
-        smry2009 %>% filter(Count == 1) %>% ungroup %>%
-          select(grp, AS, m, s) %>%
-          pivot_wider(names_from="AS", values_from = c("m","s")) %>%
-          mutate_at(vars(matches("_")), round) %>%
-          merge(smry2009_n, on="grp")
+    # display only correct trial mean/sd
+    # and reshape to match table at top
+    # also include counts and last scan date
+    eye_age %>% filter(ymd<20100000, sesnum==1) %>%
+      tbl_scores
 #+end_src
 
 #+RESULTS:
-| grp       | m_AS | m_PS | s_AS | s_PS |  n | lastscan |
-|-----------+------+------+------+------+----+----------|
-| Adults    |  476 |  354 |   98 |   64 | 20 | 20070919 |
-| Children  |  518 |  392 |  173 |  109 | 39 | 20090711 |
-| Teenagers |  495 |  366 |  116 |   84 | 59 | 20091114 |
+| grp       | m_AS | m_PS | s_AS | s_PS | n_ids | lastscan |
+|-----------+------+------+------+------+-------+----------|
+| Adults    |  476 |  354 |   98 |   64 |    20 | 20070919 |
+| Children  |  518 |  392 |  173 |  109 |    39 | 20090711 |
+| Teenagers |  495 |  366 |  116 |   84 |    59 | 20091114 |
 
 ** Notes
 
 We have a lot more data! But if we restrict to correct trials only from only the first sessions before 2010, we can get close to the original reported values.
 
 These latencies are extracted from the automatic scoring, which wasn't implemented until after the 2010 paper. When inspected, score mismatches between algorithm and human showed the error to be human the majority of the time.
+
+** All Sessions
+   
+*** Correct only
+   #+begin_src R :colnames yes :session
+     eye_age %>% tbl_scores
+   #+end_src
+
+   #+RESULTS:
+   | grp       | m_AS | m_PS | s_AS | s_PS | n_ids | lastscan |
+   |-----------+------+------+------+------+-------+----------|
+   | Adults    |  477 |  370 |   93 |   76 |    38 | 20120104 |
+   | Children  |  520 |  392 |  160 |  107 |    41 | 20101120 |
+   | Teenagers |  488 |  371 |  105 |   88 |    84 | 20111217 |
+
+*** ErrorCorrected only
+   #+begin_src R :colnames yes :session
+     eye_age %>% tbl_scores(keep_scores=c(2))
+   #+end_src
+
+   #+RESULTS:
+   | grp       | m_AS | m_PS | s_AS | s_PS | n_ids | lastscan |
+   |-----------+------+------+------+------+-------+----------|
+   | Adults    |  350 |  318 |   85 |  189 |    38 | 20120104 |
+   | Children  |  369 |  316 |   91 |  199 |    41 | 20101120 |
+   | Teenagers |  349 |  292 |   77 |  170 |    84 | 20111217 |
